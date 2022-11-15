@@ -1,0 +1,44 @@
+version: '3.3'
+
+services:
+  mongoA:
+    container_name: mongoA
+    image: mongo:4.4
+    volumes:
+      - ~/mongors/dataA:/data/db
+      - ./rs-init.sh:/home/ec2-user/docker-mongodb/rs-init.sh
+    networks:
+      - mongors-network
+    ports:
+      - 27021:27017
+    links:
+      - mongoB
+      - mongoC
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+  mongoB:
+    container_name: mongoB
+    image: mongo:4.4
+    volumes:
+      - ~/mongors/dataB:/data/db
+    networks:
+      - mongors-network
+    ports:
+      - 27022:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+  mongoC:
+    container_name: mongoC
+    image: mongo:4.4
+    volumes:
+      - ~/mongors/dataC:/data/db
+    networks:
+      - mongors-network
+    ports:
+      - 27023:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+
+networks:
+  mongors-network:
+    driver: bridge
