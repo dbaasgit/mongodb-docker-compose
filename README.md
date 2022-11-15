@@ -127,5 +127,4 @@ Connect to docker container mongo1 and execute the file rs-init.sh.
 Now, when you want to work, run: ./startdb.sh
 When you finished and want to stop everything: docker-compose down
 
-
     
